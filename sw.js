@@ -10,7 +10,8 @@ const FILES_TO_CACHE = [
   'favicon.ico',
   'favicon-16x16.png',
   'favicon-32x32.png',
-  'icon.png' // 确保 icon.png 被缓存
+  'icon.png',
+  'InterVariable.woff2' // 新增字体文件缓存
 ];
 
 // 安装服务工作者并缓存资源

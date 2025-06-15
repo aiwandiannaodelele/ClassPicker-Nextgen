@@ -19,6 +19,17 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="manifest" href="manifest.json">
   
+  <!-- 引入 Inter 字体 -->
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('InterVariable.woff2') format('woff2-variations');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+  </style>
+  
   <script src="tailwindcss.js"></script>
   <link href="font-awesome.min.css" rel="stylesheet">
   
@@ -39,7 +50,7 @@
             }
           },
           fontFamily: {
-            inter: ['Inter', 'system-ui', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
           },
         },
       }
@@ -140,7 +151,7 @@
     
     <!-- 底部信息 -->
     <div class="mt-4 text-center text-neutral-500 text-sm flex justify-center items-center">
-      <span>ClassPicker v1.0.1</span>
+      <span>ClassPicker v0.0.3</span> <!-- 版本号已修改为0.0.3 -->
     </div>
   </div>
 
@@ -152,11 +163,11 @@
           <img src="icon.png" alt="应用图标" class="w-12 h-12 rounded-full">
         </div>
         <h2 class="text-2xl font-bold text-neutral-800 mb-1">点的就是你</h2>
-        <p class="text-neutral-500">ClassPicker v1.0.1</p>
+        <p class="text-neutral-500">ClassPicker v0.0.3</p> <!-- 版本号已修改为0.0.3 -->
       </div>
       <div class="text-center text-neutral-700 mb-6">
         <p>Ivan/龚奕帆 制作</p>
-        <p class="mt-2 text-sm text-neutral-500">随机点名工具 · 课堂互动助手</p>
+        <p class="mt-2 text-sm text-neutral-500">一款简洁高效的随机点名工具，适用于课堂、会议等场景的快速随机选择。</p>
       </div>
       <div class="flex justify-center">
         <button id="close-dialog" class="btn-secondary px-8">
