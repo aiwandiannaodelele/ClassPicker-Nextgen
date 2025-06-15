@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+  <title>点的就是你</title>
+  <script src="tailwindcss.js"></script>
+  <link href="font-awesome.min.css" rel="stylesheet">
+  
+  <!-- Tailwind配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#F59E0B', // 黄色主题色
+            secondary: '#D97706', // 深黄色
+            neutral: {
+              100: '#F8FAFC',
+              200: '#E2E8F0',
+              300: '#CBD5E1',
+              700: '#334155',
+              800: '#1E293B',
+            }
+          },
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .number-display {
+        @apply text-[clamp(2.8rem,8vw,4.5rem)] min-h-[120px] leading-[120px] text-center rounded-xl bg-neutral-100 transition-all duration-300;
+      }
+      .result-number {
+        @apply text-primary font-bold text-[clamp(3rem,8.5vw,4.7rem)];
+      }
+      .btn-primary {
+        @apply bg-primary text-white py-4 px-10 rounded-lg font-medium transition-all duration-300 hover:bg-secondary hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary/50;
+      }
+      .btn-secondary {
+        @apply bg-white text-primary border border-primary py-4 px-10 rounded-lg font-medium transition-all duration-300 hover:bg-primary/5 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary/30;
+      }
+      .spin-button {
+        @apply w-10 h-10 flex items-center justify-center border border-neutral-200 rounded transition-all duration-300 hover:bg-neutral-100 active:scale-95;
+      }
+      .toggle-switch {
+        @apply relative inline-block w-12 h-6 cursor-pointer;
+      }
+      .toggle-switch input {
+        @apply opacity-0 w-0 h-0;
+      }
+      .slider {
+        @apply absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-neutral-300 transition-all duration-300 rounded-full;
+        @apply before:content-[''] before:absolute before:h-5 before:w-5 before:left-[2px] before:bottom-[2px] before:bg-white before:transition-all before:duration-300 before:rounded-full;
+      }
+      .toggle-switch input:checked + .slider {
+        @apply bg-primary;
+      }
+      .toggle-switch input:checked + .slider:before {
+        @apply transform translate-x-6;
+      }
+      .input-number {
+        @apply w-16 h-10 border border-neutral-200 text-center rounded-md mx-1 focus:outline-none focus:ring-2 focus:ring-primary/50;
+      }
+      .app-title {
+        @apply flex items-center space-x-3;
+      }
+      .app-icon {
+        @apply w-8 h-8 rounded-full object-cover;
+      }
+      .no-select {
+        @apply select-none;
+      }
+    }
+  </style>
+</head>
+<body class="bg-white min-h-screen font-inter flex items-center justify-center p-4 overflow-hidden no-select">
+  <div id="app-container" class="max-w-md w-full space-y-6 px-4 transform transition-transform duration-300">
+    <!-- 标题区域 -->
+    <div class="text-center mb-2 app-title">
+      <img src="icon.png" alt="应用图标" class="app-icon">
+      <h1 class="text-2xl font-bold text-neutral-800">点的就是你</h1>
+      <button id="open-about" class="ml-auto text-neutral-500 hover:text-primary transition-colors">
+        关于
+      </button>
+    </div>
+    
+    <!-- 内容区域 -->
+    <div class="space-y-6">
+      <!-- 数字显示区域 -->
+      <div class="number-display" id="number-display">0</div>
+      
+      <!-- 控制按钮 -->
+      <div class="flex justify-center">
+        <button class="btn-primary w-full" id="toggle-button">点！</button>
+      </div>
+      
+      <!-- 学号输入区域 -->
+      <div class="flex items-center justify-center space-x-2">
+        <span class="text-neutral-700 font-medium">学号范围:</span>
+        <button class="spin-button" id="dec-button">-</button>
+        <input type="text" class="input-number" id="student-id" value="45">
+        <button class="spin-button" id="inc-button">+</button>
+      </div>
+      
+      <!-- 功能选项 -->
+      <div class="flex items-center justify-between">
+        <label class="flex items-center space-x-2 cursor-pointer">
+          <span class="text-neutral-700">瞬间模式</span>
+        </label>
+        <label class="toggle-switch" for="instant-mode">
+          <input type="checkbox" id="instant-mode">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+    
+    <!-- 底部信息 -->
+    <div class="mt-4 text-center text-neutral-500 text-sm flex justify-center items-center">
+      <span>ClassPicker v1.0.1</span>
+    </div>
+  </div>
+
+  <!-- 关于对话框 -->
+  <div id="about-dialog" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden no-select">
+    <div class="bg-white rounded-xl shadow-custom-lg max-w-md w-full p-6 transform transition-all duration-300 scale-95 opacity-0" id="dialog-content">
+      <div class="text-center mb-6">
+        <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+          <img src="icon.png" alt="应用图标" class="w-12 h-12 rounded-full">
+        </div>
+        <h2 class="text-2xl font-bold text-neutral-800 mb-1">点的就是你</h2>
+        <p class="text-neutral-500">ClassPicker v1.0.1</p>
+      </div>
+      <div class="text-center text-neutral-700 mb-6">
+        <p>Ivan/龚奕帆 制作</p>
+        <p class="mt-2 text-sm text-neutral-500">随机点名工具 · 课堂互动助手</p>
+      </div>
+      <div class="flex justify-center">
+        <button id="close-dialog" class="btn-secondary px-8">
+          关闭
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 禁止文字选中
+      document.body.classList.add('no-select');
+      
+      // 自动缩放功能
+      const appContainer = document.getElementById('app-container');
+      const scaleApp = () => {
+        const containerWidth = appContainer.offsetWidth;
+        const windowWidth = window.innerWidth;
+        const scale = Math.min(1, windowWidth / containerWidth);
+        
+        appContainer.style.transform = `scale(${scale})`;
+        appContainer.style.transformOrigin = 'center top';
+      };
+      
+      // 初始化缩放
+      scaleApp();
+      
+      // 窗口大小变化时重新缩放
+      window.addEventListener('resize', scaleApp);
+      
+      // 禁用右键菜单
+      document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+      });
+      
+      // 变量初始化
+      const numberDisplay = document.getElementById('number-display');
+      const toggleButton = document.getElementById('toggle-button');
+      const studentIdInput = document.getElementById('student-id');
+      const decButton = document.getElementById('dec-button');
+      const incButton = document.getElementById('inc-button');
+      const instantModeCheckbox = document.getElementById('instant-mode');
+      
+      let isRunning = false;
+      let numberInterval;
+      let maxNum = 45;
+      let currentStyle = 'normal';
+      
+      // 增加学号范围
+      incButton.addEventListener('click', function() {
+        try {
+          const current = parseInt(studentIdInput.value);
+          studentIdInput.value = current + 1;
+          maxNum = current + 1;
+        } catch (e) {
+          studentIdInput.value = 1;
+          maxNum = 1;
+        }
+      });
+      
+      // 减少学号范围
+      decButton.addEventListener('click', function() {
+        try {
+          const current = parseInt(studentIdInput.value);
+          if (current > 1) {
+            studentIdInput.value = current - 1;
+            maxNum = current - 1;
+          }
+        } catch (e) {
+          studentIdInput.value = 1;
+          maxNum = 1;
+        }
+      });
+      
+      // 切换数字滚动状态
+      toggleButton.addEventListener('click', function() {
+        if (isRunning) {
+          stopNumber();
+        } else {
+          if (instantModeCheckbox.checked) {
+            instantResult();
+          } else {
+            startNumber();
+          }
+        }
+      });
+      
+      // 开始随机选择数字
+      function startNumber() {
+        try {
+          maxNum = parseInt(studentIdInput.value);
+          if (isNaN(maxNum) || maxNum < 1) {
+            maxNum = 1;
+            studentIdInput.value = 1;
+          }
+        } catch (e) {
+          maxNum = 45;
+          studentIdInput.value = 45;
+        }
+        
+        // 重置显示样式
+        setNormalStyle();
+        
+        isRunning = true;
+        toggleButton.textContent = '停！';
+        toggleButton.classList.add('bg-red-500', 'hover:bg-red-600');
+        toggleButton.classList.remove('bg-primary', 'hover:bg-secondary');
+        
+        // 启动数字滚动
+        numberInterval = setInterval(function() {
+          const number = Math.floor(Math.random() * maxNum) + 1;
+          numberDisplay.textContent = number;
+          
+          // 添加数字滚动动画效果
+          numberDisplay.classList.add('scale-105');
+          setTimeout(() => {
+            numberDisplay.classList.remove('scale-105');
+          }, 50);
+        }, 50);
+      }
+      
+      // 停止随机选择数字
+      function stopNumber() {
+        clearInterval(numberInterval);
+        isRunning = false;
+        toggleButton.textContent = '点！';
+        toggleButton.classList.remove('bg-red-500', 'hover:bg-red-600');
+        toggleButton.classList.add('bg-primary', 'hover:bg-secondary');
+        
+        // 应用结果样式
+        setResultStyle();
+        
+        // 添加结果动画效果
+        numberDisplay.classList.add('scale-110', 'ring-2', 'ring-primary/30');
+        setTimeout(() => {
+          numberDisplay.classList.remove('scale-110', 'ring-2', 'ring-primary/30');
+        }, 300);
+      }
+      
+      // 瞬间出结果功能
+      function instantResult() {
+        try {
+          maxNum = parseInt(studentIdInput.value);
+          if (isNaN(maxNum) || maxNum < 1) {
+            maxNum = 1;
+            studentIdInput.value = 1;
+          }
+        } catch (e) {
+          maxNum = 45;
+          studentIdInput.value = 45;
+        }
+        
+        // 生成随机数并直接显示
+        const number = Math.floor(Math.random() * maxNum) + 1;
+        numberDisplay.textContent = number;
+        
+        // 应用结果样式
+        setResultStyle();
+        
+        // 添加结果动画效果
+        numberDisplay.classList.add('scale-110', 'ring-2', 'ring-primary/50');
+        setTimeout(() => {
+          numberDisplay.classList.remove('scale-110', 'ring-2', 'ring-primary/50');
+        }, 300);
+      }
+      
+      // 设置结果显示样式
+      function setResultStyle() {
+        currentStyle = 'result';
+        numberDisplay.classList.add('result-number');
+      }
+      
+      // 设置正常显示样式
+      function setNormalStyle() {
+        currentStyle = 'normal';
+        numberDisplay.classList.remove('result-number');
+      }
+      
+      // 打开关于对话框
+      document.getElementById('open-about').addEventListener('click', function() {
+        const aboutDialog = document.getElementById('about-dialog');
+        const dialogContent = document.getElementById('dialog-content');
+        aboutDialog.classList.remove('hidden');
+        setTimeout(() => {
+          dialogContent.classList.remove('scale-95', 'opacity-0');
+          dialogContent.classList.add('scale-100', 'opacity-100');
+        }, 50);
+      });
+      
+      // 关闭关于对话框
+      document.getElementById('close-dialog').addEventListener('click', function() {
+        const dialogContent = document.getElementById('dialog-content');
+        dialogContent.classList.remove('scale-100', 'opacity-100');
+        dialogContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+          document.getElementById('about-dialog').classList.add('hidden');
+        }, 300);
+      });
+      
+      // 点击对话框外部关闭
+      document.getElementById('about-dialog').addEventListener('click', function(e) {
+        if (e.target === this) {
+          document.getElementById('close-dialog').click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
