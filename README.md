@@ -60,7 +60,7 @@
    - 从 [ Releases ](https://github.com/aiwandiannaodelele/ClassPicker-Nextgen/releases) 下载最新版本的 HTML 文件和二进制文件
    - 在浏览器中打开 HTML 文件即可使用
 2. **在线使用**：
-   - 直接访问 [ GitHub Pages ](https://aiwandiannaodelele.github.io/ClassPicker-Nextgen/) 版本
+   - 直接访问 [ GitHub Pages ](https://cp.leleawa.dpdns.org) 版本
 
 ### 资源要求
 - 图标文件（可选）：
