@@ -1,4 +1,4 @@
-# ClassPicker - 点的就是你 (HTML 版本)
+# ClassPicker - 点的就是你
 
 一款基于 HTML、Tailwind CSS 和 JavaScript 开发的前端随机点名工具，无需后端支持，打开网页即可使用。
 
@@ -60,7 +60,7 @@
    - 从 [ Releases ](https://github.com/aiwandiannaodelele/ClassPicker-Nextgen/releases) 下载最新版本的 HTML 文件和二进制文件
    - 在浏览器中打开 HTML 文件即可使用
 2. **在线使用**：
-   - 直接访问 [ GitHub Pages ](https://aiwandiannaodelele.github.io/ClassPicker/) 版本
+   - 直接访问 [ GitHub Pages ](https://aiwandiannaodelele.github.io/ClassPicker-Nextgen/) 版本
 
 ### 资源要求
 - 图标文件（可选）：
