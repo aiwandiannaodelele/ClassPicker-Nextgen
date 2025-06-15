@@ -1,6 +1,6 @@
 {
-  "short_name": "ClassPicker",
-  "name": "点的就是你",
+  "short_name": "点的就是你",
+  "name": "ClassPicker",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",
