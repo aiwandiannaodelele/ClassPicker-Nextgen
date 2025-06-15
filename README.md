@@ -2,7 +2,7 @@
 
 一款基于 HTML、Tailwind CSS 和 JavaScript 开发的前端随机点名工具，无需后端支持，打开网页即可使用。
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deployed-blueviolet)](https://aiwandiannaodelele.github.io/ClassPicker-Nextgen/)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deployed-blueviolet)](http://cp.leleawa.dpdns.org)
 [![License](https://img.shields.io/github/license/aiwandiannaodelele/ClassPicker-Nextgen)](LICENSE)
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)](https://html5.com)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
