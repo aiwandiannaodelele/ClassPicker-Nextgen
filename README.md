@@ -1,4 +1,136 @@
-# ClassPicker - 点的就是你
+# ClassPicker
+
+A front-end random name picking tool developed with HTML, Tailwind CSS, and JavaScript. No backend support is required—simply open the webpage to use it.
+
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deployed-blueviolet)](http://cp.leleawa.dpdns.org)
+[![License](https://img.shields.io/github/license/aiwandiannaodelele/ClassPicker-Nextgen)](LICENSE)
+[![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)](https://html5.com)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)](https://javascript.com)
+
+## 🚀 Project Features
+
+- **Pure Front-end Implementation**: No backend support needed; all functions are completed in the browser.
+- **Zero Dependencies**: Only uses HTML, CSS, and JavaScript without relying on any frameworks.
+- **Responsive Design**: Adapts to different screen sizes and works well on both mobile and desktop devices.
+- **Ready to Use**: Directly open the HTML file in a browser after downloading.
+- **Lightweight**: Small file size with fast loading speed.
+
+## 🌟 Core Functions
+
+### 1. Random Number Selection
+- Customize the student ID range (e.g., 1-45).
+- Click the button to randomly scroll and stop at a number.
+- Digital scrolling animation effect to enhance visual feedback.
+
+### 2. Instant Result
+- After checking the function, clicking the button directly displays the final random number.
+- No animation preview needed, improving selection efficiency.
+- Suitable for scenarios requiring quick results.
+
+### 3. Interface Optimization
+- Modern UI design implemented with Tailwind CSS.
+- Disables browser zoom and right-click menu for a better user experience.
+- Automatically adjusts the interface zoom ratio according to the window size.
+- Disables text selection to avoid accidental operations.
+
+### 4. About Interface
+- Simple about interface displaying version information.
+- Includes the app icon to enhance brand recognition.
+
+## 🛠️ Technical Implementation
+
+### Technology Stack
+- **HTML5**: Semantic tags to build the page structure.
+- **Tailwind CSS v3**: Implements modern UI design and responsive layout.
+- **JavaScript**: Implements random number generation, animation effects, and interaction logic.
+- **Font Awesome**: Provides icon support (optional, for the about interface).
+
+### Key Features
+- Random number generation algorithm to ensure result randomness.
+- Digital scrolling animation effect to enhance user experience.
+- Responsive design adapting to different devices.
+- Window pinning function (implemented via CSS).
+- Customizable theme colors for easy modification.
+
+## 📦 Installation and Usage
+
+### Usage Methods
+1. **Direct Download and Use**:
+   - Download the latest version of the HTML file and binary files from [Releases](https://github.com/aiwandiannaodelele/ClassPicker-Nextgen/releases).
+   - Open the HTML file in a browser to use it.
+2. **Online Use**:
+   - Directly visit the [GitHub Pages](https://cp.leleawa.dpdns.org) version.
+
+### Resource Requirements
+- Icon files (optional):
+  - `icon.png`: App icon for the about interface.
+  - If the icon file is missing, the about interface will display the default icon.
+
+## 🖥️ Interface Preview
+![Interface Preview](https://github.com/user-attachments/assets/0ff43294-a9d3-45c8-a9aa-ae5cae21822c)
+
+### Interface Description
+- **Number Display Area**: Shows the current random number, highlighted when selected (yellow theme color).
+- **Control Buttons**: Start/stop random selection, switching states when clicked.
+- **Student ID Range**: Customizes the random number range, supporting plus/minus buttons for quick adjustment.
+- **Function Options**: Instant result toggle with a modern sliding switch.
+- **About Button**: Click to display the about interface with version and developer information.
+
+## ⚙️ Custom Configuration
+
+### Theme Color Modification
+1. Open the HTML file.
+2. Locate the Tailwind configuration section:
+   ```javascript
+   <script>
+     tailwind.config = {
+       theme: {
+         extend: {
+           colors: {
+             primary: '#F59E0B', // Yellow theme color
+             secondary: '#D97706', // Dark yellow
+             // Other color configurations...
+           },
+           // Other configurations...
+         },
+       }
+     }
+   </script>
+   ```
+3. Modify the `primary` and `secondary` color values to change the theme color.
+
+
+## 📝 Notes
+
+### 1. Browser Compatibility
+- Modern browsers (Chrome, Firefox, Edge, Safari, etc.) are recommended.
+- IE browser is not supported.
+
+### 2. Local Storage
+- This application does not use any local storage; all data is only in memory.
+- All settings will return to default after refreshing the page.
+
+### 3. macOS Installation
+- Open the installation package and drag the software icon into the App folder on the right.
+- If a prompt appears saying the installation package is damaged after opening, open Terminal, enter `sudo xattr -r -d com.apple.quarantine /Applications/点的就是你.app`, then enter the password (note that the password will not be displayed), and then open the software again without the prompt.
+
+
+## 📧 Contact and Feedback
+
+- **Developer**: Ivan (aiwandiannaodelele)
+- **Email**: aiwandiannaodelele@outlook.com
+- **Issue Feedback**: Submit suggestions or bug reports in [GitHub Issues](https://github.com/aiwandiannaodelele/ClassPicker-Nextgen/issues).
+- **Project Address**: https://github.com/aiwandiannaodelele/ClassPicker-Nextgen
+
+## 📄 Open Source License
+
+This project is licensed under the [MIT License](LICENSE). Contributions or improvement suggestions are welcome!
+
+---
+
+✨ Use ClassPicker to make random selection easier!
+# 点的就是你
 
 一款基于 HTML、Tailwind CSS 和 JavaScript 开发的前端随机点名工具，无需后端支持，打开网页即可使用。
 
@@ -118,7 +250,7 @@
 
 ## 📧 联系与反馈
 
-- **开发者**：Ivan/龚奕帆（aiwandiannaodelele）
+- **开发者**：龚奕帆（aiwandiannaodelele）
 - **邮箱**：aiwandiannaodelele@outlook.com
 - **问题反馈**：在 [ GitHub Issues ](https://github.com/aiwandiannaodelele/ClassPicker-Nextgen/issues) 提交建议或 Bug 报告
 - **项目地址**：https://github.com/aiwandiannaodelele/ClassPicker-Nextgen
