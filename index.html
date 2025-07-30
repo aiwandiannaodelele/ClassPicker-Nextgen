@@ -31,8 +31,6 @@
   </style>
   
   <script src="tailwindcss.js"></script>
-  <link href="font-awesome.min.css" rel="stylesheet">
-  
   <!-- Tailwind配置 -->
   <script>
     tailwind.config = {
@@ -64,6 +62,11 @@
       }
       .number-display {
         @apply text-[clamp(2.8rem,8vw,4.5rem)] min-h-[120px] leading-[120px] text-center rounded-xl bg-neutral-100 transition-all duration-300;
+        /* 新增：防止文字换行并根据容器宽度自动调整 */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
       }
       .result-number {
         @apply text-primary font-bold text-[clamp(3rem,8.5vw,4.7rem)];
@@ -72,7 +75,7 @@
         @apply bg-primary text-white py-4 px-10 rounded-lg font-medium transition-all duration-300 hover:bg-secondary hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary/50;
       }
       .btn-secondary {
-        @apply bg-white text-primary border border-primary py-4 px-10 rounded-lg font-medium transition-all duration-300 hover:bg-primary/5 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary/30;
+        @apply bg-white text-primary border border-primary py-4 px-6 rounded-lg font-medium transition-all duration-300 hover:bg-primary/5 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary/30;
       }
       .spin-button {
         @apply w-10 h-10 flex items-center justify-center border border-neutral-200 rounded transition-all duration-300 hover:bg-neutral-100 active:scale-95;
@@ -105,6 +108,18 @@
       .no-select {
         @apply select-none;
       }
+      .file-upload {
+        @apply hidden;
+      }
+      .upload-label {
+        @apply text-primary text-sm cursor-pointer hover:underline transition-colors;
+      }
+      .list-info {
+        @apply text-neutral-500 text-xs mt-1;
+      }
+      .control-buttons {
+        @apply flex justify-center space-x-3;
+      }
     }
   </style>
 </head>
@@ -121,20 +136,32 @@
     
     <!-- 内容区域 -->
     <div class="space-y-6">
-      <!-- 数字显示区域 -->
-      <div class="number-display" id="number-display">0</div>
+      <!-- 数字/姓名显示区域 -->
+      <div class="number-display" id="display-area">0</div>
       
-      <!-- 控制按钮 -->
-      <div class="flex justify-center">
-        <button class="btn-primary w-full" id="toggle-button">点！</button>
+      <!-- 控制按钮区域 -->
+      <div class="control-buttons">
+        <button class="btn-primary flex-1" id="toggle-button">点！</button>
+        <button class="btn-secondary hidden" id="reset-button">复位</button>
       </div>
       
       <!-- 学号输入区域 -->
-      <div class="flex items-center justify-center space-x-2">
+      <div class="flex items-center justify-center space-x-2" id="id-range-container">
         <span class="text-neutral-700 font-medium">学号范围:</span>
         <button class="spin-button" id="dec-button">-</button>
         <input type="text" class="input-number" id="student-id" value="45">
         <button class="spin-button" id="inc-button">+</button>
+      </div>
+      
+      <!-- 名单上传区域 -->
+      <div class="flex flex-col items-center justify-center space-y-1 hidden" id="list-upload-container">
+        <span class="text-neutral-700 font-medium w-full text-center">
+          名单已加载: <span id="list-count" class="text-primary">0</span> 人
+          <span id="remaining-container" class="hidden">，剩余: <span id="remaining-count" class="text-green-500">0</span> 人</span>
+        </span>
+        <label for="file-upload" class="upload-label">更换名单文件</label>
+        <input type="file" id="file-upload" class="file-upload" accept=".txt">
+        <p class="list-info">格式要求: TXT文件，每行一个姓名</p>
       </div>
       
       <!-- 功能选项 -->
@@ -147,11 +174,33 @@
           <span class="slider"></span>
         </label>
       </div>
+      
+      <!-- 名单模式开关 -->
+      <div class="flex items-center justify-between">
+        <label class="flex items-center space-x-2 cursor-pointer">
+          <span class="text-neutral-700">名单模式</span>
+        </label>
+        <label class="toggle-switch" for="list-mode">
+          <input type="checkbox" id="list-mode">
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <!-- 不允许重复开关 -->
+      <div class="flex items-center justify-between">
+        <label class="flex items-center space-x-2 cursor-pointer">
+          <span class="text-neutral-700">不允许重复</span>
+        </label>
+        <label class="toggle-switch" for="no-repeat">
+          <input type="checkbox" id="no-repeat">
+          <span class="slider"></span>
+        </label>
+      </div>
     </div>
     
     <!-- 底部信息 -->
     <div class="mt-4 text-center text-neutral-500 text-sm flex justify-center items-center">
-      <span>ClassPicker v0.0.3</span> <!-- 版本号已修改为0.0.3 -->
+      <span>ClassPicker v0.0.4</span>
     </div>
   </div>
 
@@ -163,15 +212,40 @@
           <img src="icon.png" alt="应用图标" class="w-12 h-12 rounded-full">
         </div>
         <h2 class="text-2xl font-bold text-neutral-800 mb-1">点的就是你</h2>
-        <p class="text-neutral-500">ClassPicker v0.0.3</p> <!-- 版本号已修改为0.0.3 -->
+        <p class="text-neutral-500">ClassPicker v0.0.4</p>
       </div>
       <div class="text-center text-neutral-700 mb-6">
         <p>Ivan/龚奕帆 制作</p>
         <p class="mt-2 text-sm text-neutral-500">一款简洁高效的随机点名工具，适用于课堂、会议等场景的快速随机选择。</p>
+        <p class="mt-4 text-sm">
+          <a href="https://github.com/aiwandiannaodelele/ClassPicker-Nextgen" target="_blank" class="text-primary hover:underline">
+   GitHub
+          </a>
+          <span class="mx-2">|</span>
+          <span>使用 MIT 协议开源</span>
+        </p>
       </div>
       <div class="flex justify-center">
         <button id="close-dialog" class="btn-secondary px-8">
           关闭
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 抽取完毕提示弹窗 -->
+  <div id="completed-dialog" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden no-select">
+    <div class="bg-white rounded-xl shadow-custom-lg max-w-md w-full p-6 transform transition-all duration-300 scale-95 opacity-0" id="completed-dialog-content">
+      <div class="text-center mb-6">
+        <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+          <img src="icon.png" alt="应用图标" class="w-12 h-12 rounded-full">
+        </div>
+        <h2 class="text-xl font-bold text-neutral-800 mb-4">所有项目已抽取完毕</h2>
+        <p class="text-neutral-700">请点击复位按钮重新开始</p>
+      </div>
+      <div class="flex justify-center">
+        <button id="close-completed-dialog" class="btn-secondary px-8">
+          确定
         </button>
       </div>
     </div>
@@ -218,17 +292,32 @@
       });
       
       // 变量初始化
-      const numberDisplay = document.getElementById('number-display');
+      const displayArea = document.getElementById('display-area');
       const toggleButton = document.getElementById('toggle-button');
+      const resetButton = document.getElementById('reset-button');
       const studentIdInput = document.getElementById('student-id');
       const decButton = document.getElementById('dec-button');
       const incButton = document.getElementById('inc-button');
       const instantModeCheckbox = document.getElementById('instant-mode');
+      const listModeCheckbox = document.getElementById('list-mode');
+      const noRepeatCheckbox = document.getElementById('no-repeat');
+      const idRangeContainer = document.getElementById('id-range-container');
+      const listUploadContainer = document.getElementById('list-upload-container');
+      const listCountElement = document.getElementById('list-count');
+      const remainingCountElement = document.getElementById('remaining-count');
+      const remainingContainer = document.getElementById('remaining-container');
+      const fileUpload = document.getElementById('file-upload');
       
       let isRunning = false;
       let numberInterval;
       let maxNum = 45;
       let currentStyle = 'normal';
+      let studentList = [];
+      let originalStudentList = [];
+      let originalMaxNum = 45;
+      let selectedItems = [];
+      let isListMode = false;
+      let noRepeat = false;
       
       // 增加学号范围
       incButton.addEventListener('click', function() {
@@ -236,9 +325,13 @@
           const current = parseInt(studentIdInput.value);
           studentIdInput.value = current + 1;
           maxNum = current + 1;
+          originalMaxNum = maxNum;
+          updateRemainingCount();
         } catch (e) {
           studentIdInput.value = 1;
           maxNum = 1;
+          originalMaxNum = 1;
+          updateRemainingCount();
         }
       });
       
@@ -249,115 +342,333 @@
           if (current > 1) {
             studentIdInput.value = current - 1;
             maxNum = current - 1;
+            originalMaxNum = maxNum;
+            updateRemainingCount();
           }
         } catch (e) {
           studentIdInput.value = 1;
           maxNum = 1;
+          originalMaxNum = 1;
+          updateRemainingCount();
         }
       });
       
-      // 切换数字滚动状态
+      // 切换名单模式
+      listModeCheckbox.addEventListener('change', function() {
+        isListMode = this.checked;
+        
+        if (isListMode) {
+          // 切换到名单模式
+          idRangeContainer.classList.add('hidden');
+          listUploadContainer.classList.remove('hidden');
+          
+          // 如果还没有加载名单，提示上传
+          if (studentList.length === 0) {
+            displayArea.textContent = '请上传名单';
+            setNormalStyle();
+            fileUpload.click(); // 自动弹出文件选择
+          }
+        } else {
+          // 切换到学号模式
+          idRangeContainer.classList.remove('hidden');
+          listUploadContainer.classList.add('hidden');
+          displayArea.textContent = '0';
+          setNormalStyle();
+        }
+        resetSelection();
+        updateRemainingCount();
+        updateRemainingDisplay(); // 更新剩余人数显示状态
+      });
+      
+      // 切换不允许重复模式
+      noRepeatCheckbox.addEventListener('change', function() {
+        noRepeat = this.checked;
+        
+        if (noRepeat) {
+          // 开启不重复模式
+          resetButton.classList.remove('hidden');
+          resetSelection();
+        } else {
+          // 关闭不重复模式
+          resetButton.classList.add('hidden');
+        }
+        updateRemainingCount();
+        updateRemainingDisplay(); // 更新剩余人数显示状态
+      });
+      
+      // 控制剩余人数显示
+      function updateRemainingDisplay() {
+        if (noRepeat && isListMode) {
+          remainingContainer.classList.remove('hidden');
+        } else {
+          remainingContainer.classList.add('hidden');
+        }
+      }
+      
+      // 复位按钮点击事件
+      resetButton.addEventListener('click', function() {
+        resetSelection();
+        displayArea.textContent = isListMode ? '准备就绪' : '0';
+        setNormalStyle();
+      });
+      
+      // 处理文件上传
+      fileUpload.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        // 验证文件格式
+        if (file.type !== 'text/plain' && !file.name.endsWith('.txt')) {
+          // 显示自定义弹窗提示文件格式错误
+          showCompletedDialog('请上传TXT格式的文件');
+          return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          // 解析文件内容，按行分割
+          const content = event.target.result;
+          studentList = content.split('\n')
+            .map(name => name.trim())
+            .filter(name => name.length > 0); // 过滤空行
+            
+          originalStudentList = [...studentList];
+          
+          // 更新名单数量显示
+          listCountElement.textContent = studentList.length;
+          updateRemainingCount();
+          updateRemainingDisplay(); // 更新剩余人数显示状态
+          
+          // 如果名单为空，提示错误
+          if (studentList.length === 0) {
+            displayArea.textContent = '名单为空';
+            showCompletedDialog('名单文件为空或格式不正确，请确保每行一个姓名');
+          } else {
+            displayArea.textContent = '准备就绪';
+            setNormalStyle();
+          }
+          
+          // 复位选择状态
+          resetSelection();
+        };
+        reader.readAsText(file);
+      });
+      
+      // 点击上传标签触发文件选择
+      document.querySelector('.upload-label').addEventListener('click', function() {
+        fileUpload.click();
+      });
+      
+      // 切换随机选择状态
       toggleButton.addEventListener('click', function() {
         if (isRunning) {
-          stopNumber();
+          stopRandom();
         } else {
+          // 检查名单模式是否有数据
+          if (isListMode && studentList.length === 0) {
+            showCompletedDialog('请先上传有效的名单文件');
+            fileUpload.click();
+            return;
+          }
+          
+          // 检查是否还有可抽取的项目
+          if (noRepeat && getRemainingItems().length === 0) {
+            showCompletedDialog('所有项目已抽取完毕，请点击复位按钮重新开始');
+            return;
+          }
+          
           if (instantModeCheckbox.checked) {
             instantResult();
           } else {
-            startNumber();
+            startRandom();
           }
         }
       });
       
-      // 开始随机选择数字
-      function startNumber() {
-        try {
-          maxNum = parseInt(studentIdInput.value);
-          if (isNaN(maxNum) || maxNum < 1) {
-            maxNum = 1;
-            studentIdInput.value = 1;
-          }
-        } catch (e) {
-          maxNum = 45;
-          studentIdInput.value = 45;
+      // 获取剩余可抽取的项目
+      function getRemainingItems() {
+        if (isListMode) {
+          return noRepeat ? studentList.filter(item => !selectedItems.includes(item)) : studentList;
+        } else {
+          const allNumbers = Array.from({length: maxNum}, (_, i) => i + 1);
+          return noRepeat ? allNumbers.filter(num => !selectedItems.includes(num)) : allNumbers;
         }
-        
-        // 重置显示样式
-        setNormalStyle();
-        
+      }
+      
+      // 更新剩余数量显示
+      function updateRemainingCount() {
+        if (isListMode) {
+          const remaining = noRepeat ? studentList.filter(item => !selectedItems.includes(item)).length : studentList.length;
+          remainingCountElement.textContent = remaining;
+        }
+      }
+      
+      // 复位选择状态
+      function resetSelection() {
+        selectedItems = [];
+        updateRemainingCount();
+      }
+      
+      // 开始随机选择 - 速度改为10ms
+      function startRandom() {
         isRunning = true;
         toggleButton.textContent = '停！';
         toggleButton.classList.add('bg-red-500', 'hover:bg-red-600');
         toggleButton.classList.remove('bg-primary', 'hover:bg-secondary');
         
-        // 启动数字滚动
-        numberInterval = setInterval(function() {
-          const number = Math.floor(Math.random() * maxNum) + 1;
-          numberDisplay.textContent = number;
+        // 重置显示样式
+        setNormalStyle();
+        
+        // 根据模式选择不同的随机方式
+        if (isListMode) {
+          // 名单模式 - 随机显示姓名（速度提升到10ms）
+          numberInterval = setInterval(function() {
+            const candidates = getRemainingItems();
+            if (candidates.length === 0) {
+              displayArea.textContent = '已全部抽取';
+              clearInterval(numberInterval);
+              return;
+            }
+            const randomIndex = Math.floor(Math.random() * candidates.length);
+            const randomName = candidates[randomIndex];
+            displayArea.textContent = randomName;
+            
+            // 动态调整长名字的字体大小
+            adjustFontSizeForLongText(randomName);
+            
+            // 添加动画效果
+            displayArea.classList.add('scale-105');
+            setTimeout(() => {
+              displayArea.classList.remove('scale-105');
+            }, 10);
+          }, 10); // 速度改为10ms
+        } else {
+          // 学号模式 - 随机显示数字（速度提升到10ms）
+          try {
+            maxNum = parseInt(studentIdInput.value);
+            if (isNaN(maxNum) || maxNum < 1) {
+              maxNum = 1;
+              studentIdInput.value = 1;
+            }
+          } catch (e) {
+            maxNum = 45;
+            studentIdInput.value = 45;
+          }
           
-          // 添加数字滚动动画效果
-          numberDisplay.classList.add('scale-105');
-          setTimeout(() => {
-            numberDisplay.classList.remove('scale-105');
-          }, 50);
-        }, 50);
+          numberInterval = setInterval(function() {
+            const candidates = getRemainingItems();
+            if (candidates.length === 0) {
+              displayArea.textContent = '已全部抽取';
+              clearInterval(numberInterval);
+              return;
+            }
+            const randomIndex = Math.floor(Math.random() * candidates.length);
+            displayArea.textContent = candidates[randomIndex];
+            
+            // 添加动画效果
+            displayArea.classList.add('scale-105');
+            setTimeout(() => {
+              displayArea.classList.remove('scale-105');
+            }, 10);
+          }, 10); // 速度改为10ms
+        }
       }
       
-      // 停止随机选择数字
-      function stopNumber() {
+      // 调整长文本的字体大小
+      function adjustFontSizeForLongText(text) {
+        const displayElement = document.getElementById('display-area');
+        const containerWidth = displayElement.offsetWidth;
+        
+        // 简单估算：字符越长，字体越小（中文约占1.2倍宽度）
+        const charCount = text.length;
+        let fontSize;
+        
+        if (charCount <= 3) {
+          fontSize = 'clamp(2.8rem,8vw,4.5rem)'; // 默认大小
+        } else if (charCount <= 6) {
+          fontSize = 'clamp(2.2rem,6vw,3.8rem)'; // 中等大小
+        } else if (charCount <= 9) {
+          fontSize = 'clamp(1.8rem,5vw,3rem)'; // 较小大小
+        } else {
+          fontSize = 'clamp(1.4rem,4vw,2.4rem)'; // 最小大小
+        }
+        
+        displayElement.style.fontSize = fontSize;
+      }
+      
+      // 停止随机选择
+      function stopRandom() {
         clearInterval(numberInterval);
         isRunning = false;
         toggleButton.textContent = '点！';
         toggleButton.classList.remove('bg-red-500', 'hover:bg-red-600');
         toggleButton.classList.add('bg-primary', 'hover:bg-secondary');
         
+        // 记录选中项（如果开启不重复模式）
+        if (noRepeat) {
+          const currentItem = isListMode ? displayArea.textContent : parseInt(displayArea.textContent);
+          if (!selectedItems.includes(currentItem)) {
+            selectedItems.push(currentItem);
+            updateRemainingCount();
+          }
+        }
+        
         // 应用结果样式
         setResultStyle();
         
         // 添加结果动画效果
-        numberDisplay.classList.add('scale-110', 'ring-2', 'ring-primary/30');
+        displayArea.classList.add('scale-110', 'ring-2', 'ring-primary/30');
         setTimeout(() => {
-          numberDisplay.classList.remove('scale-110', 'ring-2', 'ring-primary/30');
+          displayArea.classList.remove('scale-110', 'ring-2', 'ring-primary/30');
         }, 300);
       }
       
       // 瞬间出结果功能
       function instantResult() {
-        try {
-          maxNum = parseInt(studentIdInput.value);
-          if (isNaN(maxNum) || maxNum < 1) {
-            maxNum = 1;
-            studentIdInput.value = 1;
-          }
-        } catch (e) {
-          maxNum = 45;
-          studentIdInput.value = 45;
+        const candidates = getRemainingItems();
+        if (candidates.length === 0) {
+          displayArea.textContent = '已全部抽取';
+          return;
         }
         
-        // 生成随机数并直接显示
-        const number = Math.floor(Math.random() * maxNum) + 1;
-        numberDisplay.textContent = number;
+        // 随机选择
+        const randomIndex = Math.floor(Math.random() * candidates.length);
+        const result = candidates[randomIndex];
+        displayArea.textContent = result;
+        
+        // 调整长名字大小
+        if (isListMode) {
+          adjustFontSizeForLongText(result);
+        }
+        
+        // 记录选中项（如果开启不重复模式）
+        if (noRepeat && !selectedItems.includes(result)) {
+          selectedItems.push(result);
+          updateRemainingCount();
+        }
         
         // 应用结果样式
         setResultStyle();
         
         // 添加结果动画效果
-        numberDisplay.classList.add('scale-110', 'ring-2', 'ring-primary/50');
+        displayArea.classList.add('scale-110', 'ring-2', 'ring-primary/50');
         setTimeout(() => {
-          numberDisplay.classList.remove('scale-110', 'ring-2', 'ring-primary/50');
+          displayArea.classList.remove('scale-110', 'ring-2', 'ring-primary/50');
         }, 300);
       }
       
       // 设置结果显示样式
       function setResultStyle() {
         currentStyle = 'result';
-        numberDisplay.classList.add('result-number');
+        displayArea.classList.add('result-number');
       }
       
       // 设置正常显示样式
       function setNormalStyle() {
         currentStyle = 'normal';
-        numberDisplay.classList.remove('result-number');
+        displayArea.classList.remove('result-number');
+        // 重置字体大小为默认值
+        displayArea.style.fontSize = '';
       }
       
       // 打开关于对话框
@@ -387,6 +698,43 @@
           document.getElementById('close-dialog').click();
         }
       });
+      
+      // 显示抽取完毕对话框
+      function showCompletedDialog(message) {
+        const completedDialog = document.getElementById('completed-dialog');
+        const completedDialogContent = document.getElementById('completed-dialog-content');
+        
+        // 更新对话框消息
+        if (message) {
+          completedDialogContent.querySelector('p.text-neutral-700').textContent = message;
+        }
+        
+        completedDialog.classList.remove('hidden');
+        setTimeout(() => {
+          completedDialogContent.classList.remove('scale-95', 'opacity-0');
+          completedDialogContent.classList.add('scale-100', 'opacity-100');
+        }, 50);
+      }
+      
+      // 关闭抽取完毕对话框
+      document.getElementById('close-completed-dialog').addEventListener('click', function() {
+        const completedDialogContent = document.getElementById('completed-dialog-content');
+        completedDialogContent.classList.remove('scale-100', 'opacity-100');
+        completedDialogContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+          document.getElementById('completed-dialog').classList.add('hidden');
+        }, 300);
+      });
+      
+      // 点击抽取完毕对话框外部关闭
+      document.getElementById('completed-dialog').addEventListener('click', function(e) {
+        if (e.target === this) {
+          document.getElementById('close-completed-dialog').click();
+        }
+      });
+      
+      // 初始化剩余人数显示状态
+      updateRemainingDisplay();
     });
   </script>
 </body>

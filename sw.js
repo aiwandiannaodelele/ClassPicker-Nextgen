@@ -3,7 +3,6 @@ const FILES_TO_CACHE = [
   '/',
   'index.html',
   'tailwindcss.js',
-  'font-awesome.min.css',
   'android-chrome-192x192.png',
   'android-chrome-512x512.png',
   'apple-touch-icon.png',
