@@ -36,7 +36,6 @@ A front-end random name picking tool developed with HTML, Tailwind CSS, and Java
 
 ### 4. About Interface
 - Simple about interface displaying version information.
-- Includes the app icon to enhance brand recognition.
 
 ## 🛠️ Technical Implementation
 
@@ -50,7 +49,6 @@ A front-end random name picking tool developed with HTML, Tailwind CSS, and Java
 - Random number generation algorithm to ensure result randomness.
 - Digital scrolling animation effect to enhance user experience.
 - Responsive design adapting to different devices.
-- Window pinning function (implemented via CSS).
 - Customizable theme colors for easy modification.
 
 ## 📦 Installation and Usage
@@ -168,7 +166,6 @@ This project is licensed under the [MIT License](LICENSE). Contributions or impr
 
 ### 4. 关于界面
 - 简洁的关于界面，显示版本信息
-- 包含应用图标，提升品牌识别度
 
 ## 🛠️ 技术实现
 
@@ -182,7 +179,6 @@ This project is licensed under the [MIT License](LICENSE). Contributions or impr
 - 随机数生成算法，确保结果随机性
 - 数字滚动动画效果，增强用户体验
 - 响应式设计，适配不同设备
-- 窗口置顶功能（通过 CSS 实现）
 - 自定义主题色，可轻松修改
 
 ## 📦 安装与使用
