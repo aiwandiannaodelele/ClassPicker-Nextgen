@@ -1,8 +1,9 @@
 # ClassPicker
+[中文](https://github.com/aiwandiannaodelele/ClassPicker-nextgen?tab=readme-ov-file#%E7%82%B9%E7%9A%84%E5%B0%B1%E6%98%AF%E4%BD%A0)
 
 A front-end random name picking tool developed with HTML, Tailwind CSS, and JavaScript. No backend support is required—simply open the webpage to use it.
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deployed-blueviolet)](http://cp.leleawa.dpdns.org)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deployed-blueviolet)](http://cpng.paydn.cn)
 [![License](https://img.shields.io/github/license/aiwandiannaodelele/ClassPicker-Nextgen)](LICENSE)
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)](https://html5.com)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
@@ -58,7 +59,7 @@ A front-end random name picking tool developed with HTML, Tailwind CSS, and Java
    - Download the latest version of the HTML file and binary files from [Releases](https://github.com/aiwandiannaodelele/ClassPicker-Nextgen/releases).
    - Open the HTML file in a browser to use it.
 2. **Online Use**:
-   - Directly visit the [GitHub Pages](https://cp.leleawa.dpdns.org) version.
+   - Directly visit the [GitHub Pages](https://cpng.paydn.cn) version.
 
 ### Resource Requirements
 - Icon files (optional):
@@ -132,7 +133,7 @@ This project is licensed under the [MIT License](LICENSE). Contributions or impr
 
 一款基于 HTML、Tailwind CSS 和 JavaScript 开发的前端随机点名工具，无需后端支持，打开网页即可使用。
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deployed-blueviolet)](http://cp.leleawa.dpdns.org)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deployed-blueviolet)](http://cpng.paydn.cn)
 [![License](https://img.shields.io/github/license/aiwandiannaodelele/ClassPicker-Nextgen)](LICENSE)
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)](https://html5.com)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
@@ -188,7 +189,7 @@ This project is licensed under the [MIT License](LICENSE). Contributions or impr
    - 从 [ Releases ](https://github.com/aiwandiannaodelele/ClassPicker-Nextgen/releases) 下载最新版本的 HTML 文件和二进制文件
    - 在浏览器中打开 HTML 文件即可使用
 2. **在线使用**：
-   - 直接访问 [ GitHub Pages ](https://cp.leleawa.dpdns.org) 版本
+   - 直接访问 [ GitHub Pages ](https://cpng.paydn.cn) 版本
 
 ### 资源要求
 - 图标文件（可选）：
